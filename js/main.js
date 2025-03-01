@@ -36,3 +36,22 @@ Modifica getChefBirthday(id) per intercettare eventuali errori prima di fare la 
 Esempio di output atteso con formattazione
 
 Data di nascita dello chef: 15/06/1990 */
+
+const getChefBirthday = async (id) => {
+  const chefRecipe = await fetch(`https://dummyjson.com/recipes/${id}`);
+  const recipe = await chefRecipe.json();
+  const chefResponse = await fetch(
+    `https://dummyjson.com/users/${recipe.userId}`
+  );
+  const chef = await chefResponse.json();
+  return chef.birthDate;
+};
+
+(async () => {
+  try {
+    const birthDay = await getChefBirthday(1);
+    console.log("Data di nascita dello chef:", birthDay);
+  } catch {
+    (error) => console.error("Errore:", error.message);
+  }
+})();
